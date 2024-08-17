@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Upload</title>
+</head>
+<body>
+    <h1>COMMUNITY POTHOLE REPORTING</h1>
+    <form id="photoForm">
+        <input type="file" accept="image/*" id="photoInput" required>
+        <button type="button" onclick="uploadPhoto()">Upload Photo</button>
+    </form>
+
+    <script>
+async function getLocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        } else {
+            reject(new Error('Geolocation is not supported by this browser.'));
+        }
+    });
+}
+
+async function uploadPhoto() {
+    const fileInput = document.getElementById('photoInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select a photo.');
+        return;
+    }
+
+    try {
+        const position = await getLocation();
+        const latitude = position.coords.latitude.toFixed(6);
+        const longitude = position.coords.longitude.toFixed(6);
+
+        const formData = new FormData();
+        formData.append('file', file);  //original file name
+        formData.append('latitude', latitude);  
+        formData.append('longitude', longitude);  
+
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            alert('photo uploaded successfully!');
+        } else {
+            const errorData = await response.json();
+            alert('failed to upload photo: ' + errorData.error);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+
+    </script>
+</body>
+</html>
