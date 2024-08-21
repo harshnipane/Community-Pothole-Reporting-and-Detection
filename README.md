@@ -10,7 +10,7 @@ This project focuses on detecting potholes using deep learning models, including
 - AWS S3
   
 ## Data Collection
-- The dataset consists of 8,000 road images collected from Kaggle, containing both pothole and non-pothole images.
+- The dataset consists of 8,000 road images collected from Kaggle, containing both pothole and plain road images.
 
 ## Model Architecture
 - VGG16: Pre-trained model fine-tuned with additional layers.
